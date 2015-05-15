@@ -372,28 +372,36 @@ $('#fullpages div.section').each(function(index){
 $('.scroll-menu li:first-child').addClass('active');
 //-----------------------------------------------------------------------------------
 // project detail scroll animation on clicking left green menu in Project-Detail-Page
-$('.scroll-menu li a').on('click',function(e){
-  e.preventDefault()
   var headerHt = $('.header').innerHeight();
   var blockUpperHt = $('.section_detail_upper').innerHeight();
+
+		
+$('.scroll-menu li a').on('click',function(e){
+	$('.close-frame').stop().fadeOut();
+  e.preventDefault()
   var checkAttr = $(this).attr('href');
   var dataindex = $(this).attr('data-index');
   var topValue = $(checkAttr).innerHeight();
 // if(!$(this).parent().hasClass('active')){
   $('.scroll-menu li').removeClass('active'); 
-  $('.ajax-result').stop().animate({scrollTop:topValue*dataindex},1200, function(){/*
-		
-			
-		*/})
+ 
 		//----
-			$('.project_listing .project_block').stop().removeClass('active').removeAttr('style');
-			$('.project_listing .project_block').stop().each(function(){
+		function getScrollChangeProject(){
+			$('.project_listing .project_block').removeClass('active').removeAttr('style');
+			$('.project_listing .project_block').each(function(){
 				var projectListing_dataIndex = $(this).attr('data-index');
 				if(projectListing_dataIndex === dataindex){
 					console.log(projectListing_dataIndex +'-'+ dataindex)
 					$(this).stop().trigger('click')
 				}
 			})
+		}
+			
+		$('.ajax-result').stop().animate({scrollTop:topValue*dataindex},1500, function(){
+			getScrollChangeProject()
+		$('.close-frame').fadeIn();
+			
+		})	
 			
 		//--
   $(this).parent().addClass('active');
@@ -912,10 +920,12 @@ $('.equal_height').css('height', newHeight);
 //------------------------------------------------------
 var blockitem_height = $('.project_block').height();
 $('.close-frame').click(function(e){
- console.log('close frame clicked')
+ //console.log('close frame clicked')
  e.preventDefault();
 $('.ajax-result').animate({'opacity':0},400, function(){
-$(this).css({'z-index':-1})
+	//console.log('opacity animation call back start')
+$(this).css({'z-index':-1});
+	//console.log('ajax result z-index -1')
 var winheight = $(window).height();
 var winScrollTop = $(window).scrollTop();
 var activeProject_offsetTop = $('.project_listing .project_block.active .close').offset().top;
